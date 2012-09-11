@@ -1,0 +1,10 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	dns
+#open	2012-09-09-07-28-01
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	trans_id	query	qclass	qclass_name	qtype	qtype_name	rcode	rcode_name	AA	TC	RD	RA	Z	answers	TTLs
+#types	time	string	addr	port	addr	port	enum	count	string	count	string	count	string	count	string	bool	bool	bool	bool	count	vector[string]	vector[interval]
+1347129322.185157	xxCPhsgKSA8	2000:1300::2	5353	ff02::fb	5353	udp	0	_sane-port._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-
+#close	2012-09-09-07-28-01

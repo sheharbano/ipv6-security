@@ -1,0 +1,54 @@
+-----------------------------------------------------------
+TEST 50: printf("Test %2d: too small length field\t\t\t", count); 
+-----------------------------------------------------------
+ if (test == 0 || test == count) {
+    printf("Test %2d: too small length field\t\t\t", count);
+    memset(bla, count % 256, sizeof(bla));
+    if ((pkt = thc_create_ipv6(interface, PREFER_GLOBAL, &pkt_len, src6, dst6, 255, 0, 0, 0, 0)) == NULL)
+      return -1;
+    thc_add_icmp6(pkt, &pkt_len, ICMP6_PINGREQUEST, 0, count, (unsigned char *) &bla, 150, 0);
+    if (thc_generate_pkt(interface, srcmac, dstmac, pkt, &pkt_len) < 0)
+      return -1;
+    hdr = (thc_ipv6_hdr *) pkt;
+    if (rawmode)
+      i = 0;
+    else
+      i = 14;
+    hdr->pkt[4 + i] = 0;        // set ip length to 0
+    hdr->pkt[5 + i] = 60;
+    while (thc_pcap_check(p, (char *) ignoreit, NULL) > 0);
+    if (thc_send_pkt(interface, pkt, &pkt_len) < 0)
+      return -1;
+    pkt = thc_destroy_packet(pkt);
+    if (check_for_reply(p, NXT_ICMP6, ICMP6_PINGREPLY, NXT_ICMP6, ICMP6_PINGREPLY, 140, 140 + i, bla))
+      tests[count] = 1;
+  }
+  count++;
+-----------------------------------------------------------
+
+Test  0: normal ping6				PASSED - we got a reply
+Test 50: too small length field			FAILED - no reply
+Test 54: normal ping6 (still alive?)		PASSED - we got a reply
+
+---------------------------------------------------------------
+
+Bro does not generate the event:
+event ipv6_ext_headers(c: connection, p: pkt_hdr)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,34 @@
+-------------------------------------------------------
+TEST 29: printf("Test %2d: mobile prefix solicitation\t\t", count); 
+-------------------------------------------------------
+ if (test == 0 || test == count) {
+    printf("Test %2d: mobile prefix solicitation\t\t", count);
+    if ((pkt = thc_create_ipv6(interface, PREFER_GLOBAL, &pkt_len, src6, dst6, 255, 0, 0, 0, 0)) == NULL)
+      return -1;
+    memset(buf, 0, sizeof(buf));
+    buf[0] = 0xc9;
+    buf[1] = 16;
+    memcpy(buf + 2, src6, 16);
+    if (thc_add_hdr_dst(pkt, &pkt_len, (unsigned char *) &buf, 18) < 0)
+      return -1;
+    thc_add_icmp6(pkt, &pkt_len, ICMP6_MOBILE_PREFIXSOL, 0, count << 16, (unsigned char *) &buf, 18, 0);
+    while (thc_pcap_check(p, (char *) ignoreit, NULL) > 0);
+    if (thc_generate_and_send_pkt(interface, srcmac, dstmac, pkt, &pkt_len) < 0)
+      return -1;
+    pkt = thc_destroy_packet(pkt);
+    if (check_for_reply(p, NXT_ICMP6, ICMP6_MOBILE_PREFIXADV, NXT_ICMP6, ICMP6_MOBILE_PREFIXADV, 0, 0, NULL))
+      tests[count] = 1;
+  }
+  count++;
+---------------------------------------------------------
+Test  0: normal ping6				PASSED - we got a reply
+Test 29: mobile prefix solicitation		FAILED - no reply
+Test 54: normal ping6 (still alive?)		PASSED - we got a reply
+--------------------------------------------------------
+print |p$ip6$exts|;
+
+1
+
+print p$ip6$exts[0];
+
+[id=60, hopopts=<uninitialized>, dstopts=[nxt=58, len=2, options=[[otype=201, len=16, data= \0^S\0\0\0\0\0\0\0\0\0\0\0\0^A], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]], routing=<uninitialized>, fragment=<uninitialized>, ah=<uninitialized>, esp=<uninitialized>, mobility=<uninitialized>]

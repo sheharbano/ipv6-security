@@ -1,0 +1,60 @@
+--------------------------------------------------------------------
+
+TEST 22: printf("Test %2d: fragmentation source-route (todo)\t", count);
+
+--------------------------------------------------------------------
+
+ if (test == 0 || test == count) {
+    printf("Test %2d: fragmentation source-route (todo)\t", count);
+    if ((pkt = thc_create_ipv6(interface, PREFER_GLOBAL, &pkt_len, src6, dst6, 255, 0, 0, 0, 0)) == NULL)
+      return -1;
+    memset(bla, count % 256, sizeof(bla));
+    routers[0] = src6;          // route via ourself, but
+    routers[1] = NULL;          // telling the target that this was not performed yet
+    if (thc_add_hdr_route(pkt, &pkt_len, routers, 1) < 0)
+      return -1;
+    thc_add_icmp6(pkt, &pkt_len, ICMP6_PINGREQUEST, 0, count, (unsigned char *) &bla, 1220, 0);
+    if (thc_generate_pkt(interface, srcmac, dstmac, pkt, &pkt_len) < 0)
+      return -1;
+    hdr = (thc_ipv6_hdr *) pkt;
+    while (thc_pcap_check(p, (char *) ignoreit, NULL) > 0);
+    if (thc_send_as_fragment6(interface, src6, dst6, NXT_ROUTE,
+                              hdr->pkt + 40 + 14 - 14 * rawmode, hdr->pkt_len - 40 - 14 + 14 * rawmode,
+                              hdr->pkt_len > fragsize ? fragsize : (((hdr->pkt_len - 40 - 14 + 14 * rawmode) / 16) + 1) * 8) < 0)
+      return -1;
+    pkt = thc_destroy_packet(pkt);
+    if (check_for_reply(p, NXT_ROUTE, NXT_ICMP6, NXT_ICMP6, ICMP6_PINGREPLY, 250, 0, bla))
+      tests[count] = 1;
+  }
+  count++;
+
+-------------------------------------------------------------------
+
+Test  0: normal ping6				PASSED - we got a reply
+Test 22: fragmentation source-route (todo)	FAILED - error reply
+Test 54: normal ping6 (still alive?)		PASSED - we got a reply
+
+-------------------------------------------------------------------
+
+print |p$ip6$exts|;
+1
+
+print p$ip6$exts[0];
+
+[id=43, hopopts=<uninitialized>, dstopts=<uninitialized>, routing=[nxt=58, len=2, rtype=0, segleft=1, data=\0\0\0\0 \0^S\0\0\0\0\0\0\0\0\0\0\0\0^A], fragment=<uninitialized>, ah=<uninitialized>, esp=<uninitialized>, mobility=<uninitialized>]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
