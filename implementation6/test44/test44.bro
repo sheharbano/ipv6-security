@@ -1,3 +1,9 @@
+event icmp_parameter_problem(c: connection, icmp: icmp_conn, code: count, context: icmp_context)
+{
+print "ICMP parameter problem";
+}
+
+
 ## Generated for every IPv6 packet that contains extension headers.
 ## This is potentially an expensive event to handle if analysing IPv6 traffic
 ## that happens to utilize extension headers frequently.

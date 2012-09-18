@@ -27,3 +27,8 @@ event bro_init()
 {
 	print "hello";
 }
+
+event icmp_neighbor_solicitation(c: connection, icmp: icmp_conn, tgt: addr, options: icmp6_nd_options)
+{
+	print "neighbor solicit msg received";
+}

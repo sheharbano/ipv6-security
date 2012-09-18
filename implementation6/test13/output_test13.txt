@@ -59,7 +59,7 @@ if (test == 0 || test == count) {
 --------------------------------------------------------------------
 
 Test  0: normal ping6				PASSED - we got a reply
-Test 13: overlap-first-zero fragmentation	FAILED - error reply
+Test 13: overlap-first-zero fragmentation	FAILED - error reply (Wireshark says bad parameter problem (unknown next header type))
 Test 54: normal ping6 (still alive?)		PASSED - we got a reply
 
 -------------------------------------------------------------------

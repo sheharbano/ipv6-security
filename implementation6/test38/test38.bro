@@ -1,3 +1,10 @@
+event icmp_neighbor_solicitation(c: connection, icmp: icmp_conn, tgt: addr, options: icmp6_nd_options)
+	{
+	print "neighbor solic";
+	}
+
+
+
 ## Generated for every IPv6 packet that contains extension headers.
 ## This is potentially an expensive event to handle if analysing IPv6 traffic
 ## that happens to utilize extension headers frequently.
@@ -27,3 +34,5 @@ event bro_init()
 {
 	print "hello";
 }
+
+

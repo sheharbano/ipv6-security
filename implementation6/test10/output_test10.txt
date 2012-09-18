@@ -30,7 +30,7 @@ TEST 10: printf("Test %2d: 8172 destination headers\t\t", count);
   count++;
 -----------------------------------------------------------------
 
-sudo tcpdump -i eth0 -w test10-again.pcap
+sudo tcpdump -i eth0 -w test10.pcap
 tcpdump: WARNING: eth0: no IPv4 address assigned
 tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
 ^C41 packets captured
@@ -43,7 +43,28 @@ Bro could not generate the event
 event ipv6_ext_headers(c: connection, p: pkt_hdr)
 for it, but could see the fragments in wireshark
 
+------------------------------------------------------
+--> Result for increasing number of dest options to 20000, got this msg:
 
+Performing implementation checks on 2000:1300::2 via vboxnet0:
+Test  0: normal ping6				PASSED - we got a reply
+Test 10: 20000 destination headers		Error: fragment offset can not be larger than 8191 (2^13 - 1)
+
+------------------------------------------------------------------
+
+So i modified code and did
+ while(1)
+{
+	send fragmented packet with 8172 dest options
+	
+}
+
+experiment:
+1) launched the attack from host
+2) Bro was listening on the target virtual machine
+3) top on VM
+
+Result: Memory usage went from 3.4% to 3.5%. Nothing bad happened :)
 
 
 

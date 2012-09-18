@@ -27,3 +27,7 @@ event bro_init()
 {
 	print "hello";
 }
+event mobile_ipv6_message(p: pkt_hdr)
+{
+print "mobile ipv6 msg";
+}
