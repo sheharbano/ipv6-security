@@ -488,16 +488,16 @@ Alert if receive packet with a multicast link-local address (ff02::1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Test38: Sends 1 direct neighbor solicitation &
 Passed &
-Not generated: event icmp neighbor solicitation &
+generated: event icmp neighbor solicitation &
 - &
-Bro did not generate neighbor solicit msg
+Bro generated neighbor solicit msg
 \\ \hline
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Test39: Sends 1 direct neighbor solicitation ttl<255 &
 Failed no reply &
-Not generated: event icmp neighbor solicitation &
+generated: event icmp neighbor solicitation &
 (41)+, ttl=63 &
-Bro did not generate neighbor solicit event
+Bro generated neighbor solicit event
 \\ \hline
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Test40: Sends 1 ICMPv6 pkt--filled ignore hop-by-hop option &
@@ -532,14 +532,14 @@ The attack fills up dest header with a bunch of PadN option data.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Test44: Sends 1 ICMPv6 pkt--filled padding destination option &
 Failed error reply &
-Event 1 generates correct info. Event icmp parameter problem not generated. &
+Event 1 generates correct info. Event icmp parameter problem generated. &
 (2c)+ &
 As per Wireshark, the victim generates an error reply saying: parameter problem--erroneous header encountered
 \\ \hline
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Test45: Sends 1 ICMPv6 pkt--jumbo option size < 64k, length 0 &
 Failed error reply &
-Event 1 generates correct info. Event icmp parameter problem not generated. &
+Event 1 generates correct info. Event icmp parameter problem generated. &
 (2d)+ &
 As per Wireshark, the attack packet is malformed (ethernet frame check sequence incorrect) 
 and the victim generates an error reply saying: parameter problem--erroneous header encountered.
