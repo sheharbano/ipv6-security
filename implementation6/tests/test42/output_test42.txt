@@ -1,0 +1,84 @@
+----------------------------------------------------------
+TEST 42:  printf("Test %2d: filled ignore destination option\t", count);
+----------------------------------------------------------
+ /* Testing hop-by-hop options does not make much sense as a reply usually
+     will mean that the option is known, ignored or unknown.
+     // hop: jumbo     0xc2|4|SIZE|SIZE|SIZE|SIZE
+     // hop: router alert 5|2|0|0
+     // hop: quickstart   6|6|1|count%256|count%256|count%256|count%256|0 (rfc4782)
+     // hop: calipso      7|16|0xff|0xff|0xff|0xff|2|0xff|crc|crc|0xff|0xff|0xff|0xff|0xff|0xff|0xff|0xff
+   */
+
+/*
+memset(buf, 0, sizeof(buf));
+buf[0] = 7;
+buf[1] = 12;
+buf[2] = 0xff;
+buf[3] = 0xff;
+buf[4] = 0xff;
+buf[5] = 0xff;
+buf[6] = 1;
+buf[7] = 0xff;
+buf[8] = 0;
+buf[9] = 0;
+memset(buf + 10, 0xff, 8);
+i = calculate_checksum(buf, 18);
+buf[8] = i / 256;
+buf[9] = i % 256;
+*/
+
+  if (test == 0 || test == count) {
+    printf("Test %2d: filled ignore destination option\t", count);
+    memset(bla, count % 256, sizeof(bla));
+    if ((pkt = thc_create_ipv6(interface, PREFER_GLOBAL, &pkt_len, src6, dst6, 255, 0, 0, 0, 0)) == NULL)
+      return -1;
+    memset(buf, 0, sizeof(buf));
+    i = 0;
+    for (j = 0; j < 10; j++) {
+      buf[i++] = NXT_IGNORE;    // ignore, length 
+      buf[i++] = j;
+      if (j > 0) {
+        memset(buf + i, 0xaa, j);
+        i += j;
+      }
+    }
+
+/*
+    buf[i++] = 0xc9; // mobility, length 16
+    buf[i++] = 16;
+    memcpy(buf+i, src6, 16);
+    i += 16;
+    buf[i++] = 4; // tunnel max encaps, length 1
+    buf[i++] = 1;
+    buf[i++] = 0;
+*/
+    buf[i++] = 1;               // padN, length 2
+    buf[i++] = 2;
+    buf[i++] = count % 256;
+    buf[i++] = count % 256;
+    buf[i++] = 0;               // pad1
+
+    if (thc_add_hdr_dst(pkt, &pkt_len, (unsigned char *) &buf, i) < 0)
+      return -1;
+    thc_add_icmp6(pkt, &pkt_len, ICMP6_PINGREQUEST, 0, count, (unsigned char *) &bla, 150, 0);
+    if (thc_generate_and_send_pkt(interface, srcmac, dstmac, pkt, &pkt_len) < 0)
+      return -1;
+    while (thc_pcap_check(p, (char *) ignoreit, NULL) > 0);
+    pkt = thc_destroy_packet(pkt);
+    if (check_for_reply(p, NXT_ICMP6, ICMP6_PINGREPLY, NXT_ICMP6, ICMP6_PINGREPLY, 140, 140 + i, bla))
+      tests[count] = 1;
+  }
+  count++;
+
+----------------------------------------------------------
+print |p$ip6$exts|;
+1
+
+print p$ip6$exts[0]
+
+[id=60, hopopts=<uninitialized>, dstopts=[nxt=58, len=8, options=[[otype=31, len=0, data=], [otype=31, len=1, data=\xaa], [otype=31, len=2, data=\xaa\xaa], [otype=31, len=3, data=\xaa\xaa\xaa], [otype=31, len=4, data=\xaa\xaa\xaa\xaa], [otype=31, len=5, data=\xaa\xaa\xaa\xaa\xaa], [otype=31, len=6, data=\xaa\xaa\xaa\xaa\xaa\xaa], [otype=31, len=7, data=\xaa\xaa\xaa\xaa\xaa\xaa\xaa], [otype=31, len=8, data=\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa], [otype=31, len=9, data=\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa], [otype=1, len=2, data=**], [otype=0, len=0, data=]]], routing=<uninitialized>, fragment=<uninitialized>, ah=<uninitialized>, esp=<uninitialized>, mobility=<uninitialized>]
+
+
+
+
+

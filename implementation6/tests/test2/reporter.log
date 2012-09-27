@@ -1,0 +1,10 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	reporter
+#open	2012-09-08-03-43-57
+#fields	ts	level	message	location
+#types	time	enum	string	string
+1346960651.498924	Reporter::ERROR	field value missing [p$ip6$exts[0]$fragment]	./test2.bro, line 15
+#close	2012-09-08-03-43-57
