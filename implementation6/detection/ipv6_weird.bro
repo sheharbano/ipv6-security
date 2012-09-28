@@ -43,55 +43,64 @@ event new_connection(c: connection)
 	local dst = c$id$resp_h;
 	local note = "";
 	local msg = "";	
+	local is_weird = F;
 
 	
 	if ( (src in [fe80::]/10) || (dst in [fe80::]/10) )
 		{
 		note = "LinkLocalIP";
 		msg="Saw IPv6 link local address.";
+		is_weird = T;
 		}
 
 	else if ( (src in [::]/128) || (dst in [::]/128) )
 		{
 		note = "UnspecifiedAddress";
 		msg="Saw IPv6 unspecified address (::/128).";
+		is_weird = T;
 		}
 
 	else if ( (src in [::1]/128) || (dst in [::1]/128) )
 		{
 		note = "LocalhostAddress";
 		msg="Saw IPv6 localhost address (::1/128).";
+		is_weird = T;
 		}
 
 	else if ( (src in [fec0::]/10) || (dst in [fec0::]/10) )
 		{
 		note = "SiteLocalAddress";
 		msg="Saw IPv6 deprecated site local address (fec0::/10).";
+		is_weird = T;
 		}
 
 	else if ( (src in [fc00::]/7) || (dst in [fc00::]/7) )
 		{
 		note = "UniqueLocalUnicastScopeAddress";
 		msg="Saw IPv6 unique local unicast scope address (fc00::/7).";
+		is_weird = T;
 		}
 
 	else if ( (src in [::]/96) || (dst in [::]/96) )
 		{
 		note = "IPv4CompatibleIPv6Address";
 		msg="Saw deprecated IPv4 compatible IPv6 address (::/96).";
+		is_weird = T;
 		}
 
 	else if ( (src in [3ffe::]/16) || (dst in [3ffe::]/16) )
 		{
 		note = "GlobalUnicastAddress:6Bone";
 		msg="Saw global unicast IPv6 6Bone address which should not be seen (3ffe::/16).";
+		is_weird = T;
 		}
 
 	# Multicast addresses	
 	else if ( (src in [ff00::]/8) || (dst in [ff00::]/8) )
 		{
 		# Determining if it's a global scope multicast
-		local is_global_multicast = F;		
+		local is_global_multicast = F;	
+		is_weird = T;	
 		local str_src = "";
 		local str_dst = "";
 		local idx = 0;
@@ -125,17 +134,20 @@ event new_connection(c: connection)
 			}
 	
 		}
-	local ipv6_weird_info: IPv6Weird::Info;
+	if ( is_weird )
+		{
+		local ipv6_weird_info: IPv6Weird::Info;
 
-	ipv6_weird_info$ts = network_time();
-	ipv6_weird_info$src_ip = src;
-	ipv6_weird_info$src_port = c$id$orig_p;
-	ipv6_weird_info$dst_ip = dst;
-	ipv6_weird_info$dst_port = c$id$resp_p;
-	ipv6_weird_info$note = note;
-	ipv6_weird_info$msg = msg;
+		ipv6_weird_info$ts = network_time();
+		ipv6_weird_info$src_ip = src;
+		ipv6_weird_info$src_port = c$id$orig_p;
+		ipv6_weird_info$dst_ip = dst;
+		ipv6_weird_info$dst_port = c$id$resp_p;
+		ipv6_weird_info$note = note;
+		ipv6_weird_info$msg = msg;
 
-	Log::write(IPv6Weird::LOG,ipv6_weird_info);		
+		Log::write(IPv6Weird::LOG,ipv6_weird_info);
+		}		
 	}
 
 
