@@ -1,0 +1,164 @@
+-----------------------------------------------------
+
+TEST 4:  printf("Test %2d: 128 hop-by-hop headers\t\t\t", count);
+
+------------------------------------------------------
+ if (test == 0 || test == count) {
+    printf("Test %2d: 128 hop-by-hop headers\t\t\t", count);
+    if ((pkt = thc_create_ipv6(interface, PREFER_GLOBAL, &pkt_len, src6, dst6, 255, 0, 0, 0, 0)) == NULL)
+      return -1;
+    memset(bla, count % 256, sizeof(bla));
+    memset(buf, 0, sizeof(buf));
+    buf[0] = NXT_IGNORE;
+    buf[1] = 0;
+    for (i = 0; i < 128; i++)
+      if (thc_add_hdr_hopbyhop(pkt, &pkt_len, (unsigned char *) &buf, 6) < 0)
+        return -1;
+    thc_add_icmp6(pkt, &pkt_len, ICMP6_PINGREQUEST, 0, count, (unsigned char *) &bla, 150, 0);
+    while (thc_pcap_check(p, (char *) ignoreit, NULL) > 0);
+    if (thc_generate_and_send_pkt(interface, srcmac, dstmac, pkt, &pkt_len) < 0)
+      return -1;
+    pkt = thc_destroy_packet(pkt);
+    if (check_for_reply(p, NXT_ICMP6, ICMP6_PINGREPLY, NXT_ICMP6, ICMP6_PINGREPLY, 130, 1200, bla))
+      tests[count] = 1;
+  }
+  count++;
+-----------------------------------------------------------
+
+
+print |p$ip6$exts|;
+128
+
+for (idx in p$ip6$exts)
+		print p$ip6$exts[idx]$hopopts;
+
+
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=0, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+[nxt=58, len=0, options=[[otype=31, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=], [otype=0, len=0, data=]]]
+

@@ -1,0 +1,14 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	conn
+#open	2012-09-09-00-24-01
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents
+#types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	count	string	count	count	count	count	table[string]
+1347132063.295783	SFgVILPjm63	fe80::800:27ff:fe00:0	135	2000:1300::2	136	icmp	-	0.000063	24	16	OTH	-	0	-	1	72	1	64	(empty)
+1347132058.293175	Xd9ppZTQ5Se	2000:1300::2	135	ff02::1:ff00:1	136	icmp	-	-	-	-	OTH	-	0	-	1	72	0	0	(empty)
+1347132058.293324	Fw44q3BnGyd	2000:1300::1	136	2000:1300::2	135	icmp	-	-	-	-	OTH	-	0	-	1	72	0	0	(empty)
+1347132068.297186	mhvNkxdDAN1	fe80::a00:27ff:febe:2293	135	fe80::800:27ff:fe00:0	136	icmp	-	0.000149	24	16	OTH	-	0	-	1	72	1	64	(empty)
+1347132058.292376	da8Vnuywvuk	2000:1300::1	128	2000:1300::2	129	icmp	-	0.002132	1252	1252	OTH	-	0	-	3	1420	3	1396	(empty)
+#close	2012-09-09-00-24-01

@@ -1,0 +1,50 @@
+---------------------------------------------------------
+TEST 43: printf("Test %2d: filled padding destination option\t", count);
+----------------------------------------------------------
+if (test == 0 || test == count) {
+    printf("Test %2d: filled padding destination option\t", count);
+    memset(bla, count % 256, sizeof(bla));
+    if ((pkt = thc_create_ipv6(interface, PREFER_GLOBAL, &pkt_len, src6, dst6, 255, 0, 0, 0, 0)) == NULL)
+      return -1;
+    memset(buf, 0, sizeof(buf));
+    i = 0;
+    for (j = 0; j < 10; j++) {
+      buf[i++] = 1;             // ignore, length 
+      buf[i++] = j;
+      if (j > 0) {
+        memset(buf + i, 0, j);
+        i += j;
+      }
+    }
+    buf[i++] = 1;               // padN, length 2
+    buf[i++] = 2;
+    buf[i++] = 0;
+    buf[i++] = 0;
+    buf[i++] = 0;               // pad1
+
+    if (thc_add_hdr_dst(pkt, &pkt_len, (unsigned char *) &buf, i) < 0)
+      return -1;
+    thc_add_icmp6(pkt, &pkt_len, ICMP6_PINGREQUEST, 0, count, (unsigned char *) &bla, 150, 0);
+    if (thc_generate_and_send_pkt(interface, srcmac, dstmac, pkt, &pkt_len) < 0)
+      return -1;
+    while (thc_pcap_check(p, (char *) ignoreit, NULL) > 0);
+    pkt = thc_destroy_packet(pkt);
+    if (check_for_reply(p, NXT_ICMP6, ICMP6_PINGREPLY, NXT_ICMP6, ICMP6_PINGREPLY, 140, 140 + i, bla))
+      tests[count] = 1;
+  }
+  count++;
+----------------------------------------------------------
+print |p$ip6$exts|;
+1
+
+print p$ip6$exts[0];
+
+[id=60, hopopts=<uninitialized>, dstopts=[nxt=58, len=8, options=[[otype=1, len=0, data=], [otype=1, len=1, data=\0], [otype=1, len=2, data=\0\0], [otype=1, len=3, data=\0\0\0], [otype=1, len=4, data=\0\0\0\0], [otype=1, len=5, data=\0\0\0\0\0], [otype=1, len=6, data=\0\0\0\0\0\0], [otype=1, len=7, data=\0\0\0\0\0\0\0], [otype=1, len=8, data=\0\0\0\0\0\0\0\0], [otype=1, len=9, data=\0\0\0\0\0\0\0\0\0], [otype=1, len=2, data=\0\0], [otype=0, len=0, data=]]], routing=<uninitialized>, fragment=<uninitialized>, ah=<uninitialized>, esp=<uninitialized>, mobility=<uninitialized>]
+
+
+
+
+
+
+
+

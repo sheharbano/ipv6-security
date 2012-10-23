@@ -1,0 +1,4 @@
+Performing implementation checks on 2000:1300::2 via vboxnet0:
+Test  0: normal ping6				PASSED - we got a reply
+Test  1: hop-by-hop ignore option		PASSED - we got a reply
+Test 54: normal ping6 (still alive?)		PASSED - we got a reply

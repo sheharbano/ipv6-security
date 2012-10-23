@@ -1,0 +1,16 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	conn
+#open	2012-09-11-03-06-16
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents
+#types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	count	string	count	count	count	count	table[string]
+1347314624.983265	y3xq1KtIUC9	2000:1300::2	5353	ff02::fb	5353	udp	dns	-	-	-	S0	-	0	D	1	87	0	0	(empty)
+1347314618.264332	QAtVCt7To4i	2000:1300::1	136	2000:1300::2	135	icmp	-	-	-	-	OTH	-	0	-	1	72	0	0	(empty)
+1347314628.280161	9adJ7IVCf96	fe80::a00:27ff:febe:2293	135	fe80::800:27ff:fe00:0	136	icmp	-	0.000288	24	16	OTH	-	0	-	1	72	1	64	(empty)
+1347314633.281950	Lqeab4HX3m1	fe80::800:27ff:fe00:0	135	fe80::a00:27ff:febe:2293	136	icmp	-	0.000061	24	16	OTH	-	0	-	1	72	1	64	(empty)
+1347314623.265684	yoOjKo6KyQ4	fe80::800:27ff:fe00:0	135	2000:1300::2	136	icmp	-	0.000074	24	16	OTH	-	0	-	1	72	1	64	(empty)
+1347314618.263871	ZVAKAY6iVTe	2000:1300::1	128	2000:1300::2	129	icmp	-	4.814627	32	32	OTH	-	0	-	2	128	2	128	(empty)
+1347314618.264135	yWlFAwz0Ied	2000:1300::2	135	ff02::1:ff00:1	136	icmp	-	-	-	-	OTH	-	0	-	1	72	0	0	(empty)
+#close	2012-09-11-03-06-16
